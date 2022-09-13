@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import "./App.css";
 import "./assets/css/bootstrap.min.css";
 import { Header } from "./Containers/Layout";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./Routes/Home";
+import { Container } from "@mui/system";
 
 function App() {
   return (
@@ -12,11 +12,9 @@ function App() {
         <Header />
       </header>
       <main>
-        <Router>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Router>
+        <Container>
+          <Home />
+        </Container>
       </main>
       <footer></footer>
     </Fragment>

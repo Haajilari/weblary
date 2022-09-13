@@ -81,11 +81,9 @@ const Header = (props: Props) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
             Web With Lary
           </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          <Box sx={{ display: { xs: "none", sm: "flex" } }}>
             {navItems.map((item, index) => (
-              <Link key={index} to={item.path}>
-                {item.key}
-              </Link>
+              <ListItemButton key={index}>{item.key}</ListItemButton>
             ))}
           </Box>
         </Toolbar>

@@ -1,6 +1,14 @@
+@font-face {
+  font-family: "Ubuntu";
+  src: url("./assets/fonts/Ubuntu-Title.ttf") !important;
+}
 body {
+  font-family: "Ubuntu" !important;
   background-color: #a1e3d8 !important;
 }
 main {
   margin-top: 5rem;
+}
+.text-justify {
+  text-align: justify;
 }

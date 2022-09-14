@@ -1,0 +1,297 @@
+@use "sass:math";
+
+@function str-replace($string, $search, $replace: "") {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace +
+      str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+
+  @return $string;
+}
+
+// =============================================================================
+// Font Face
+// =============================================================================
+
+@mixin font-face($name, $path, $weight: null, $style: null, $exts: eot woff ttf svg) {
+  $src: null;
+
+  $extmods: (
+    eot: "?",
+    svg: "#" + str-replace($name, " ", "_"),
+  );
+
+  $formats: (
+    otf: "opentype",
+    ttf: "truetype",
+  );
+
+  @each $ext in $exts {
+    $extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+    $format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+    $src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
+  }
+
+  @font-face {
+    font-family: quote($name);
+    font-style: $style;
+    font-weight: $weight;
+    src: $src;
+  }
+}
+@function toRGB($color) {
+  @return red($color) + ", " + green($color) + ", " + blue($color);
+}
+@function t($name, $opacity: 1) {
+  @return rgba(var(--M#{$name}), $opacity);
+}
+
+@mixin link($color, $hover: $color) {
+  color: t(#{$color});
+  &:hover,
+  &:focus {
+    color: t(#{$hover}-darker);
+  }
+  &:active,
+  &.active {
+    color: t(#{$hover}-darkest);
+  }
+}
+
+@mixin background($color, $bg, $show: 1, $hColor: $color, $hbg: $bg, $hDarker: 1) {
+  color: t(#{$color});
+  background-color: t(#{$bg});
+  @if $show == 1 {
+    &:not(:disabled):not(.disabled).hover,
+    &:not(:disabled):not(.disabled):hover {
+      color: if($hDarker == 1, t(#{$hColor}-darkest), t(#{$hColor}));
+      background-color: if($hDarker == 1, t(#{$hbg}-darkest), t(#{$hbg}));
+      border-color: t(#{$hbg}-darker) !important;
+    }
+    &:disabled,
+    &.disabled {
+      opacity: 0.3;
+      color: t(#{$hColor}-lightest);
+      background-color: t(#{$hbg}-lightest);
+    }
+    &:not(:disabled):not(.disabled).active,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).focus,
+    &:not(:disabled):not(.disabled):focus {
+      color: if($hDarker == 1, t(#{$hColor}-darkest), t(#{$hColor}));
+      background-color: if($hDarker == 1, t(#{$hbg}-darkest), t(#{$hbg}));
+      box-shadow: 0 0 8px 0.2rem if($hDarker == 1, t(#{$hbg}-darkest, 0.2), t(#{$hbg})) !important;
+      border-color: t(#{$hbg}-darkest) !important;
+    }
+  }
+}
+@mixin backgroundHex($color, $bg, $show: 1, $hColor: $color, $hbg: $bg) {
+  color: $color;
+  background-color: $bg;
+  @if $show == 1 {
+    &:not(:disabled):not(.disabled).hover,
+    &:not(:disabled):not(.disabled):hover {
+      color: darken($hColor, 5%);
+      background-color: darken($hbg, 5%);
+    }
+    &:disabled,
+    &.disabled {
+      opacity: 0.3;
+    }
+    &:not(:disabled):not(.disabled).active,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).focus,
+    &:not(:disabled):not(.disabled):focus {
+      color: darken($hColor, 10%);
+      background-color: darken($hbg, 10%);
+      box-shadow: 0 0 8px 0.2rem rgba(darken($hbg, 10%), 0.2) !important;
+    }
+  }
+}
+
+@mixin border($color, $show: 1, $hoverColor: $color, $width: 1px, $type: solid, $hoverWidth: $width) {
+  border: $width $type t(#{$color});
+
+  @if $show == 1 {
+    &:not(:disabled):not(.disabled).hover,
+    &:not(:disabled):not(.disabled):hover {
+      border-color: t(#{$color}-darker);
+      border-width: $hoverWidth;
+    }
+    &:disabled,
+    &.disabled {
+      opacity: 0.3;
+    }
+    &:not(:disabled):not(.disabled).active,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).focus,
+    &:not(:disabled):not(.disabled):focus {
+      border-color: t(#{$color}-darkest);
+      border-width: $hoverWidth;
+    }
+  }
+}
+
+@mixin i($font-size: 0, $display: inline-block, $center: 0) {
+  display: $display;
+  line-height: 1;
+  vertical-align: middle;
+  font-size: (0 + $font-size);
+  &:before {
+    line-height: 1;
+    vertical-align: middle;
+    font-size: (0 + $font-size);
+    @if $center == 1 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+@mixin linear-gradient($angle, $color-stops...) {
+  $_angle-with-vendor-prefix: "";
+  $_angle: "";
+  @if $angle == "to top" or $angle == "bottom" {
+    $_angle-with-vendor-prefix: bottom;
+    $_angle: to top;
+  } @else if $angle == "to right" or $angle == "left" {
+    $_angle-with-vendor-prefix: left;
+    $_angle: to right;
+  } @else if $angle == "to bottom" or $angle == "top" {
+    $_angle-with-vendor-prefix: top;
+    $_angle: to bottom;
+  } @else if $angle == "to left" or $angle == "right" {
+    $_angle-with-vendor-prefix: right;
+    $_angle: to left;
+  } @else if $angle == "to top right" or $angle == "bottom left" {
+    $_angle-with-vendor-prefix: bottom left;
+    $_angle: to top right;
+  } @else if $angle == "to bottom right" or $angle == "top left" {
+    $_angle-with-vendor-prefix: top left;
+    $_angle: to bottom right;
+  } @else if $angle == "to bottom left" or $angle == "top right" {
+    $_angle-with-vendor-prefix: top right;
+    $_angle: to bottom left;
+  } @else if $angle == "to top left" or $angle == "bottom right" {
+    $_angle-with-vendor-prefix: bottom right;
+    $_angle: to top left;
+  } @else {
+    $_angle-with-vendor-prefix: $angle % 360;
+    $_angle: (90 - $angle) % 360;
+  }
+  background: linear-gradient($_angle, $color-stops);
+}
+
+@mixin img-center($width: 100%, $height: auto) {
+  position: relative;
+  overflow: hidden;
+  img {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    @if $width == 100% {
+      max-width: 100%;
+    } @else {
+      max-width: none;
+    }
+    width: $width;
+    height: $height;
+  }
+}
+@mixin shadow($string: 0 8px 32px 7px rgba(t("primary"), 0.08)) {
+  box-shadow: $string;
+}
+@function rem($pixels, $context: 14) {
+  @if (unitless($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+
+  @if (unitless($context)) {
+    $context: $context * 1px;
+  }
+
+  @return math.div($pixels, $context) * 1rem;
+}
+@function svg-url($svg) {
+  @if not str-index($svg, xmlns) {
+    $svg: str-replace($svg, "<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+  $encoded: "";
+  $slice: 2000;
+  $index: 0;
+  $loops: ceil(str-length($svg) / $slice);
+  @for $i from 1 through $loops {
+    $chunk: str-slice($svg, $index, $index + $slice - 1);
+    //
+    //   Encode
+    //
+    $chunk: str-replace($chunk, '"', "'");
+    $chunk: str-replace($chunk, "%", "%25");
+    $chunk: str-replace($chunk, "#", "%23");
+    $chunk: str-replace($chunk, "{", "%7B");
+    $chunk: str-replace($chunk, "}", "%7D");
+    $chunk: str-replace($chunk, "<", "%3C");
+    $chunk: str-replace($chunk, ">", "%3E");
+    $encoded: #{$encoded}#{$chunk};
+    $index: $index + $slice;
+  }
+  @return url("data:image/svg+xml,#{$encoded}");
+}
+
+@mixin background-svg($svg) {
+  background-image: svg-url($svg);
+}
+@function str-replace($string, $search, $replace: "") {
+  $index: str-index($string, $search);
+  @return if(
+    $index,
+    str-slice($string, 1, $index - 1) + $replace +
+      str-replace(str-slice($string, $index + str-length($search)), $search, $replace),
+    $string
+  );
+}
+
+@mixin margin-five {
+  $num: 0;
+
+  @while $num < 105 {
+    .m-r-#{$num} {
+      margin-right: $num + 0px !important;
+    }
+    .m-l-#{$num} {
+      margin-left: $num + 0px !important;
+    }
+    .m-t-#{$num} {
+      margin-top: $num + 0px !important;
+    }
+    .m-b-#{$num} {
+      margin-bottom: $num + 0px !important;
+    }
+    $num: $num + 5;
+  }
+}
+@mixin padding-five {
+  $num: 0;
+
+  @while $num < 105 {
+    .p-r-#{$num} {
+      padding-right: $num + 0px !important;
+    }
+    .p-l-#{$num} {
+      padding-left: $num + 0px !important;
+    }
+    .p-t-#{$num} {
+      padding-top: $num + 0px !important;
+    }
+    .p-b-#{$num} {
+      padding-bottom: $num + 0px !important;
+    }
+    $num: $num + 5;
+  }
+}

@@ -1,0 +1,578 @@
+@import "variables";
+@import "mixins";
+
+@each $name, $colors in $themes {
+  @if ($name == default) {
+    :root {
+      @each $colorName, $color in $colors {
+        --#{$colorName}: #{toRGB($color)};
+        --#{$colorName}-darker: #{toRGB(darken($color, 5%))};
+        --#{$colorName}-darkest: #{toRGB(darken($color, 10%))};
+        --#{$colorName}-lighter: #{toRGB(lighten($color, 5%))};
+        --#{$colorName}-lightest: #{toRGB(lighten($color, 10%))};
+      }
+      --Mtransparent: transparent;
+    }
+  } @else {
+    [data-theme="#{$name}"] {
+      @each $colorName, $color in $colors {
+        --#{$colorName}: #{toRGB($color)};
+        --#{$colorName}-darker: #{toRGB(darken($color, 5%))};
+        --#{$colorName}-darkest: #{toRGB(darken($color, 10%))};
+        --#{$colorName}-lighter: #{toRGB(lighten($color, 5%))};
+        --#{$colorName}-lightest: #{toRGB(lighten($color, 10%))};
+      }
+      --Mtransparent: transparent;
+    }
+  }
+}
+
+a {
+  transition: all 0.2s ease-in-out;
+  text-transform: none !important;
+}
+
+a:active,
+a:focus,
+a:hover,
+a:visited {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+html {
+  font-size: 14px;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.5;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: $font-family;
+  color: t("text");
+  background-color: t("gray");
+  text-align: inherit !important;
+  line-height: 1.5;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+i {
+  @include i(rem(14));
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.wrapper-main {
+  padding-left: 330px;
+  transition: padding-left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  &.close {
+    padding-left: 100px;
+  }
+}
+
+.dropdown-menu {
+  background-color: t("light");
+  color: t("dark");
+  margin-top: 5px !important;
+  border-radius: 0.5rem;
+  border: 1px solid t("gray");
+  padding: 0;
+  .dropdown-item {
+    padding: rem(10);
+    display: flex;
+    align-items: center;
+    @include background("text", "transparent", 1, "text", "gray");
+    &:first-child {
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+    &:last-child {
+      border-radius: 0 0 0.5rem 0.5rem;
+    }
+  }
+}
+.card {
+  background-color: t("gray-lightest");
+  border-radius: 1rem;
+  border-color: t("gray-darker");
+  &.disabled {
+    position: relative;
+    &:after {
+      content: "";
+      width: 100%;
+      height: 100%;
+      background-color: t("light", 0.1);
+      backdrop-filter: blur(3px);
+      border-radius: 1rem;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: t("gray");
+    color: t("dark");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: rem(24);
+  }
+  h2 {
+    font-size: rem(18);
+    margin-bottom: 0;
+  }
+}
+.breadcrumb {
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    color: t("primary");
+    i {
+      font-size: rem(18);
+    }
+    &:last-child {
+      color: t("txt");
+    }
+  }
+}
+.bn-onboard-custom.bn-onboard-modal {
+  font-family: $font-family !important;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: t("dark", 0.3);
+  z-index: 1302;
+  //&.level-up{
+  //  z-index: 100;
+  //}
+}
+@media (min-width: 1200px) {
+}
+
+@media (min-width: 768px) {
+}
+
+@media (max-width: 1199px) {
+}
+
+@media (max-width: 991px) {
+}
+
+@media (max-width: 767px) {
+}
+
+@media (max-width: 575px) {
+}
+
+@each $size in $sizes {
+  .fz-#{$size} {
+    //&:not(i) {
+    font-size: rem($size);
+    //}
+  }
+  //i.fz-#{$size} {
+  //  &::before {
+  //    font-size: rem($size);
+  //  }
+  //}
+}
+.btn-none {
+  border: none !important;
+}
+@each $name, $color in map-get($themes, "default") {
+  $name: str-slice($name, 2, str-length($name));
+  .show {
+    > .btn-#{$name}.dropdown-toggle {
+      border-color: t(#{$name}) !important;
+      background-color: t(#{$name}-darkest);
+      @if $name == "light" or $name == "gray" {
+        color: t(dark-darkest);
+      } @else if $name == "white" {
+        color: t(black-darkest);
+      } @else if $name == "primary" or $name == "primary2" {
+        color: t(white-darkest);
+      } @else {
+        color: t(light-darkest);
+      }
+    }
+  }
+  .btn-#{$name} {
+    border-color: t(#{$name}) !important;
+    box-shadow: none !important;
+    @if $name == "light" or $name == "gray" {
+      @include background("dark", $name, 1);
+    } @else if $name == "white" {
+      @include background("black", $name, 1);
+    } @else if $name == "primary" or $name == "primary2" {
+      @include background("white", $name, 1);
+    } @else {
+      @include background("light", $name, 1);
+    }
+  }
+  .btn-outline-#{$name} {
+    @include border($name);
+    box-shadow: none !important;
+    @if $name == "light" or $name == "gray" {
+      @include background($name, "transparent", 1, "dark", $name, 0);
+    } @else if $name == "white" {
+      @include background($name, "transparent", 1, "black", $name, 0);
+    } @else if $name == "primary" or $name == "primary2" {
+      @include background($name, "transparent", 1, "white", $name, 0);
+    } @else {
+      @include background($name, "transparent", 1, "light", $name, 0);
+    }
+  }
+
+  .badge-#{$name} {
+    color: unset;
+    background-color: t(#{$name}) !important;
+  }
+  .badge-#{$name}-darker {
+    background-color: t(#{$name}-darker) !important;
+  }
+  .badge-#{$name}-darkest {
+    background-color: t(#{$name}-darkest) !important;
+  }
+  .badge-#{$name}-lighter {
+    background-color: t(#{$name}-lighter) !important;
+  }
+  .badge-#{$name}-lightest {
+    background-color: t(#{$name}-lightest) !important;
+  }
+  .color-#{$name} {
+    color: t(#{$name}) !important;
+  }
+  .color-#{$name}-darkest {
+    color: t(#{$name}-darkest) !important;
+  }
+  .color-#{$name}-lightest {
+    color: t(#{$name}-lightest) !important;
+  }
+}
+
+.btn-fixed {
+  min-width: 150px;
+}
+.btn-shadow {
+  @include background("dark", "gray-lightest", 1, "dark", "gray");
+}
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &.fixed {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.btn-none {
+  box-shadow: none !important;
+}
+
+.btn-link {
+  @include link("text", "primary");
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+
+.btn-circle {
+  border-radius: 50px;
+}
+
+.flex-basis-0 {
+  flex-basis: 0;
+}
+
+.dir-ltr {
+  direction: ltr;
+}
+
+html[dir="rtl"] {
+  body {
+    direction: rtl;
+    text-align: right;
+  }
+
+  // -------------------- RTL Bootstrap
+  @each $size in $responsive-sizes {
+    $name: xl;
+    @if $size == 992 {
+      $name: lg;
+    } @else if $size == 768 {
+      $name: md;
+    } @else if $size == 576 {
+      $name: sm;
+    }
+    @media (min-width: #{$size}px) {
+      @for $j from 1 through 5 {
+        $size: (0.25 * $j);
+        @if $j == 3 {
+          $size: 1;
+        } @else if $j == 4 {
+          $size: 1.5;
+        } @else if $j == 5 {
+          $size: 3;
+        }
+        .ml-#{$name}-#{$j} {
+          margin-left: unset !important;
+          margin-right: #{$size}rem !important;
+        }
+        .mr-#{$name}-#{$j} {
+          margin-right: unset !important;
+          margin-left: #{$size}rem !important;
+        }
+        .pl-#{$name}-#{$j} {
+          padding-left: unset !important;
+          padding-right: #{$size}rem !important;
+        }
+        .pr-#{$name}-#{$j} {
+          padding-right: unset !important;
+          padding-left: #{$size}rem !important;
+        }
+      }
+      .ml-#{$name}-auto {
+        margin-left: unset !important;
+        margin-right: auto !important;
+      }
+
+      .mr-#{$name}-auto {
+        margin-right: unset !important;
+        margin-left: auto !important;
+      }
+      .text-#{$name}-left {
+        text-align: right !important;
+      }
+
+      .text-#{$name}-right {
+        text-align: left !important;
+      }
+    }
+  }
+  @for $j from 1 through 5 {
+    $size: (0.25 * $j);
+    @if $j == 3 {
+      $size: 1;
+    } @else if $j == 4 {
+      $size: 1.5;
+    } @else if $j == 5 {
+      $size: 3;
+    }
+    .ml-#{$j} {
+      margin-left: unset !important;
+      margin-right: #{$size}rem !important;
+    }
+    .mr-#{$j} {
+      margin-right: unset !important;
+      margin-left: #{$size}rem !important;
+    }
+    .pl-#{$j} {
+      padding-left: unset !important;
+      padding-right: #{$size}rem !important;
+    }
+    .pr-#{$j} {
+      padding-right: unset !important;
+      padding-left: #{$size}rem !important;
+    }
+  }
+
+  .ml-auto {
+    margin-left: unset !important;
+    margin-right: auto !important;
+  }
+
+  .mr-auto {
+    margin-right: unset !important;
+    margin-left: auto !important;
+  }
+
+  .text-left {
+    text-align: right !important;
+  }
+
+  .text-right {
+    text-align: left !important;
+  }
+
+  .form-check-input {
+    margin-right: -1.25rem;
+    margin-left: 0;
+  }
+
+  .custom-checkbox {
+    padding-right: 1.5rem;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .custom-control-label {
+    &:after,
+    &:before {
+      right: -1.5rem;
+      left: auto;
+    }
+  }
+
+  .input-group-prepend {
+    margin-right: inherit;
+    margin-left: -1px;
+  }
+
+  .input-group-append {
+    margin-left: inherit;
+    margin-right: -1px;
+  }
+
+  .input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+  .input-group > .input-group-append:last-child > .input-group-text:not(:last-child),
+  .input-group > .input-group-append:not(:last-child) > .btn,
+  .input-group > .input-group-append:not(:last-child) > .input-group-text,
+  .input-group > .input-group-prepend > .btn,
+  .input-group > .input-group-prepend > .input-group-text {
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+
+  .input-group > .custom-select:not(:first-child),
+  .input-group > .form-control:not(:first-child) {
+    border-radius: 0.25rem 0 0 0.25rem;
+  }
+
+  .input-group > .input-group-append > .btn,
+  .input-group > .input-group-append > .input-group-text,
+  .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
+  .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child),
+  .input-group > .input-group-prepend:not(:first-child) > .btn,
+  .input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+    border-radius: 0.25rem 0 0 0.25rem;
+  }
+
+  .input-group > .custom-select:not(:last-child),
+  .input-group > .form-control:not(:last-child) {
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+
+  .btn-group > .btn-group:not(:last-child) > .btn,
+  .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+
+  .btn-group > .btn-group:not(:first-child) > .btn,
+  .btn-group > .btn:not(:first-child) {
+    border-radius: 0.25rem 0 0 0.25rem;
+  }
+
+  .btn-group > .btn-group:not(:first-child),
+  .btn-group > .btn:not(:first-child) {
+    margin-left: 0;
+    margin-right: -1px;
+  }
+
+  .form-check {
+    padding-left: 0;
+    padding-right: 1.25rem;
+  }
+
+  .page-item {
+    &.active {
+      .page-link {
+        background-color: t("primary");
+        border-color: t("primary");
+      }
+    }
+
+    .page-link {
+      margin-right: -1px;
+      margin-left: 0;
+      box-shadow: none !important;
+      color: t("primary");
+    }
+
+    &:first-child {
+      .page-link {
+        margin-right: 0;
+        border-radius: 0 0.25rem 0.25rem 0;
+      }
+    }
+
+    &:last-child {
+      .page-link {
+        border-radius: 0.25rem 0 0 0.25rem;
+      }
+    }
+  }
+
+  .custom-switch {
+    padding-left: 0;
+    padding-right: 50px;
+
+    .custom-control-label {
+      .icon {
+        left: auto;
+        right: -50px;
+      }
+
+      &:before,
+      &:after {
+        left: auto;
+        right: -50px;
+      }
+    }
+
+    .custom-control-input {
+      &:checked ~ .custom-control-label {
+        &:after {
+          transform: translateX(-15px);
+        }
+
+        .icon {
+          transform: translateX(-15px);
+        }
+      }
+    }
+  }
+
+  // -------------------- End RTL Bootstrap
+}

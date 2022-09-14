@@ -1,0 +1,50 @@
+$primary: #91684a;
+
+$text: #2d2424;
+$txt: #787878;
+
+$light: #fafafa;
+$dark: #141415;
+
+$red: #ed6666;
+$yellow: #ffdf6b;
+$orange: #f36233;
+$green: #1abb96;
+$blue: #39a2db;
+$white: #fff;
+
+$gray: #f5f4f4;
+
+$sizes: (12, 14, 16, 18, 24, 32);
+$responsive-sizes: (1200, 992, 768, 576);
+$font-family: "Montserrat", sans-serif;
+$themes: (
+  default: (
+    Mprimary: $primary,
+    Mtext: $text,
+    Mtxt: $txt,
+    Mlight: $light,
+    Mdark: $dark,
+    Mred: $red,
+    Myellow: $yellow,
+    Morange: $orange,
+    Mgreen: $green,
+    Mblue: $blue,
+    Mgray: $gray,
+    Mwhite: $white,
+  ),
+  dark: (
+    Mprimary: $primary,
+    Mtext: lighten($text, 75%),
+    Mtxt: $txt,
+    Mlight: $dark,
+    Mdark: $light,
+    Mred: darken($red, 5%),
+    Myellow: darken($yellow, 5%),
+    Morange: darken($orange, 5%),
+    Mgreen: darken($green, 5%),
+    Mblue: darken($blue, 5%),
+    Mgray: darken($gray, 80%),
+    Mwhite: $white,
+  ),
+);

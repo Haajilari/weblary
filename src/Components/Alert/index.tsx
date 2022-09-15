@@ -3,12 +3,13 @@ import { Alert, AlertTitle, Collapse, IconButton } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
 
 interface IAlert {
+  className?: any;
   children?: any;
   alertTitle?: string;
   variant?: "standard" | "outlined" | "filled";
   severity?: "success" | "info" | "warning" | "error";
 }
-const StAlert = ({ children, alertTitle, variant = "standard", severity = "info" }: IAlert) => {
+const StAlert = ({ className, children, alertTitle, variant = "standard", severity = "info" }: IAlert) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ const StAlert = ({ children, alertTitle, variant = "standard", severity = "info"
   }, [open]);
 
   return (
-    <Collapse className="m-1" in={open}>
+    <Collapse className={"m-1 " + className} in={open}>
       <Alert
         action={
           <IconButton

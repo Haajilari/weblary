@@ -24,12 +24,12 @@ const FormTwo = ({ className, onclick }: IFormTwo) => {
           email: "",
         }}
         validationSchema={SignupSchema}
-        onSubmit={(values) => {
+        onSubmit={(values: any) => {
           // same shape as initial values
           console.log(values);
         }}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched }: any) => (
           <Form>
             <TextField label="First Name" name="firstName" />
             {errors.firstName && touched.firstName ? <div>{errors.firstName}</div> : null}

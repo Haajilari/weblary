@@ -1,7 +1,9 @@
 import { CardContent, Divider } from "@mui/material";
+import { Fragment } from "react";
 import "./style.scope.scss";
 
 interface ICardProps {
+  noTitle?: boolean;
   className?: string;
   children?: any;
   title?: string;
@@ -25,6 +27,7 @@ const StCard = ({
   title = "Default Title",
   titleHorPos = "start",
   textJustify,
+  noTitle = false,
 }: ICardProps) => {
   return (
     <div
@@ -37,10 +40,16 @@ const StCard = ({
       }
     >
       <div className="mb-3 mx-1 st-glass-bg">
-        <div className={"m-3 me-0"}>
-          <h4 className={"text-" + titleHorPos}>{title}</h4>
-        </div>
-        <Divider />
+        {noTitle ? (
+          <Fragment></Fragment>
+        ) : (
+          <Fragment>
+            <div className={"m-3 me-0"}>
+              <h4 className={"text-" + titleHorPos}>{title}</h4>
+            </div>
+            <Divider />
+          </Fragment>
+        )}
         <CardContent>
           <div className={textJustify ? "text-justify" : ""}>{children}</div>
         </CardContent>

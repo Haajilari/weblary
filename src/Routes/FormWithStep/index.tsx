@@ -7,7 +7,6 @@ import StepContent from "@mui/material/StepContent";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { StCard } from "../../Components";
 import StepOne from "./Step1";
 import StepTwo from "./Step2";
 import StepThree from "./Step3";
@@ -15,25 +14,6 @@ import StepFour from "./Step4";
 import { FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 
-const steps = [
-  {
-    label: "Select campaign settings",
-    description: `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`,
-  },
-  {
-    label: "Create an ad group",
-    description: "An ad group contains one or more ads which target a shared set of keywords.",
-  },
-  {
-    label: "Create an ad",
-    description: `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`,
-  },
-];
 function getSteps() {
   return ["First", "Second", "Third", "Fourth"];
 }
@@ -42,11 +22,11 @@ const getStepContent: (step: number, data?: any) => any = (step, data) => {
     case 0:
       return <StepOne formik={data} />;
     case 1:
-      return <StepTwo />;
+      return <StepTwo formik={data} />;
     case 2:
-      return <StepThree />;
+      return <StepThree formik={data} />;
     case 3:
-      return <StepFour />;
+      return <StepFour formik={data} />;
     default:
       break;
   }
@@ -55,37 +35,64 @@ const FormWithStep = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
   const schema = Yup.object().shape({
-    firstName: Yup.string().required("Required"),
+    firstName: Yup.string()
+      .max(15, "Must be under 15 letters")
+      .min(2, "Must be over 2 letters")
+      .required("Required"),
+    lastName: Yup.string()
+      .max(15, "Must be under 30 letters")
+      .min(2, "Must be over 2 letters")
+      .required("Required"),
+    email: Yup.string().email("Invalid Email...").required("Required"),
     requires: Yup.string().required("Required"),
   });
   const formik = useFormik({
     initialValues: {
       firstName: "",
+      lastName: "",
+      email: "",
       requires: "1",
     },
     validationSchema: schema,
     validateOnMount: true,
     validateOnChange: true,
-    onSubmit: (values) => {
-      //   console.log("test");
-      // alert(JSON.stringify(values, null, 2));
-      //   console.log(values);
+    onSubmit: (values: any) => {
+      alert([
+        "First Name:",
+        formik.values.firstName,
+        "Last Name: ",
+        formik.values.lastName,
+        "Email: ",
+        formik.values.email,
+      ]);
     },
     onReset: () => {},
   });
 
   const handleDisableNext = () => {
-    let isDisable;
-    if (activeStep == 0 && formik.errors) {
+    let isDisable = false;
+    if (activeStep === 0 && typeof formik.errors.firstName === "string") {
       isDisable = true;
-      console.log(formik.errors);
+    } else if (activeStep === 1 && typeof formik.errors.lastName === "string") {
+      isDisable = true;
+    } else if (activeStep === 2 && typeof formik.errors.email === "string") {
+      isDisable = true;
     }
-    // console.log(isDisable);
     return isDisable;
   };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep === 3) {
+      alert([
+        "First Name:",
+        formik.values.firstName,
+        "Last Name: ",
+        formik.values.lastName,
+        "Email: ",
+        formik.values.email,
+      ]);
+    }
   };
 
   const handleBack = () => {
@@ -94,6 +101,8 @@ const FormWithStep = () => {
 
   const handleReset = () => {
     setActiveStep(0);
+    formik.resetForm();
+    formik.submitForm();
   };
 
   return (
@@ -114,9 +123,9 @@ const FormWithStep = () => {
                   <Box>
                     <div>
                       <Button
-                        disabled={formik.errors ? true : false}
-                        variant="contained"
+                        disabled={handleDisableNext()}
                         onClick={handleNext}
+                        variant="contained"
                         sx={{ mt: 1, mr: 1 }}
                       >
                         {index === steps.length - 1 ? "Finish" : "Continue"}

@@ -1,7 +1,6 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
 import { StCard } from "../../../Components";
-import * as Yup from "yup";
 import { TextField } from "@mui/material";
+import { Fragment } from "react";
 
 interface IProps {
   formik?: any;
@@ -10,16 +9,8 @@ interface IProps {
 const StepOne = ({ formik }: IProps) => {
   return (
     <StCard noTitle={true}>
-      <Formik
-        initialValues={{ firstName: "", lastName: "", email: "" }}
-        validationSchema={Yup.object({
-          firstName: Yup.string()
-            .min(2, "Must be 2 characters or more")
-            .max(15, "Must be 15 characters or less")
-            .required("Required"),
-        })}
-      >
-        <Form>
+      {formik && (
+        <Fragment>
           <TextField
             label={"First Name"}
             variant={"outlined"}
@@ -27,13 +18,11 @@ const StepOne = ({ formik }: IProps) => {
             value={formik.values.firstName}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={typeof formik.errors.firstName == "string"}
-            helperText={formik.errors.firstName}
+            error={formik.touched.firstName && typeof formik.errors.firstName === "string" ? true : false}
+            helperText={formik.touched.firstName ? formik.errors.firstName : ""}
           ></TextField>{" "}
-          <ErrorMessage name="firstName" />
-          {/* <button type="submit">Submit</button> */}
-        </Form>
-      </Formik>
+        </Fragment>
+      )}
     </StCard>
   );
 };

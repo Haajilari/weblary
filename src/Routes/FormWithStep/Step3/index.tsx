@@ -1,7 +1,30 @@
 import { StCard } from "../../../Components";
+import { TextField } from "@mui/material";
+import { Fragment } from "react";
 
-const StepThree = () => {
-  return <StCard noTitle>StepThree</StCard>;
+interface IProps {
+  formik?: any;
+}
+
+const StepThree = ({ formik }: IProps) => {
+  return (
+    <StCard noTitle={true}>
+      {formik && (
+        <Fragment>
+          <TextField
+            label={"Email Address"}
+            variant={"outlined"}
+            name={"email"}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.email ||  typeof formik.errors.email === "string" ? true : false}
+            helperText={formik.touched.email ? formik.errors.email : ""}
+          ></TextField>{" "}
+        </Fragment>
+      )}
+    </StCard>
+  );
 };
 
 export default StepThree;

@@ -1,12 +1,16 @@
 import { StCard } from "../../../Components";
 import { TextField } from "@mui/material";
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef } from "react";
 
 interface IProps {
   formik?: any;
 }
 
 const StepOne = ({ formik }: IProps) => {
+  const inputRef = useRef();
+  useEffect(() => {
+  }, [formik.touched.firstName]);
+
   return (
     <StCard noTitle={true}>
       {formik && (
@@ -18,9 +22,9 @@ const StepOne = ({ formik }: IProps) => {
             value={formik.values.firstName}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.firstName && typeof formik.errors.firstName === "string" ? true : false}
+            error={formik.touched.firstName && formik.errors.firstName !== undefined}
             helperText={formik.touched.firstName ? formik.errors.firstName : ""}
-          ></TextField>{" "}
+          ></TextField>
         </Fragment>
       )}
     </StCard>

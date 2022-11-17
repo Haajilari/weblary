@@ -1,5 +1,13 @@
 import { Fragment } from "react";
-import { FlexIt, StAlert, StButton, StCard, StModal } from "../../Components";
+import {
+  FlexIt,
+  GenerateLine,
+  MultiLvlSelection,
+  StAlert,
+  StButton,
+  StCard,
+  StModal,
+} from "../../Components";
 
 const VComponent = () => {
   const LoremIps = (
@@ -14,7 +22,12 @@ const VComponent = () => {
   );
   return (
     <Fragment>
-      {/* Modal */}
+      <StCard title="MultiLevelSelect">
+        <MultiLvlSelection />
+      </StCard>
+      {/* <StCard title="Generate Line">
+        <GenerateLine></GenerateLine>
+      </StCard>
       <StCard title="Modal">
         <StModal btnColor="secondary" btnVariant="contained" btnSize="large">
           {LoremIps}
@@ -32,7 +45,7 @@ const VComponent = () => {
         </StAlert>
       </StCard>
       <StCard title="Buttons">
-        <StButton group></StButton>
+        <StButton onClick={() => alert("Hi")}> Hey</StButton>
       </StCard>
       <StCard title="Card">
         <FlexIt rowReverse justifyContent={{ active: true, mode: "end" }}>
@@ -53,9 +66,9 @@ const VComponent = () => {
           </StCard>
           <StCard lg={7} sm={12}>
             {LoremIps}
-          </StCard>
-        </FlexIt>
-      </StCard>
+          </StCard> 
+        </FlexIt> 
+      </StCard>*/}
     </Fragment>
   );
 };

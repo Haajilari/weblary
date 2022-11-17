@@ -1,5 +1,5 @@
 import { StCard } from "../../../Components";
-import { TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import { Fragment } from "react";
 
 interface IProps {
@@ -11,9 +11,15 @@ const StepThree = ({ formik }: IProps) => {
     <StCard title="Review Form">
       {formik && (
         <Fragment>
-          <div>{formik.values.firstName}</div>
-          <div>{formik.values.lastName}</div>
-          <div>{formik.values.email}</div>
+          <Grid item className="d-flex">
+            <p className="me-3 col-6 col-sm-3">Firstname: </p> <p>{formik.values.firstName}</p>
+          </Grid>
+          <Grid item className="d-flex">
+            <p className="me-3 col-6 col-sm-3">Lastname: </p> <p>{formik.values.lastName}</p>
+          </Grid>{" "}
+          <Grid item className="d-flex">
+            <p className="me-3 col-6 col-sm-3">Email: </p> <p>{formik.values.email}</p>
+          </Grid>
         </Fragment>
       )}
     </StCard>

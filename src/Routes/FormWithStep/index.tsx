@@ -51,20 +51,11 @@ const FormWithStep = () => {
       firstName: "",
       lastName: "",
       email: "",
-      requires: "1",
     },
     validationSchema: schema,
     validateOnMount: true,
     validateOnChange: true,
     onSubmit: (values: any) => {
-      alert([
-        "First Name:",
-        formik.values.firstName,
-        "Last Name: ",
-        formik.values.lastName,
-        "Email: ",
-        formik.values.email,
-      ]);
     },
     onReset: () => {},
   });
@@ -83,15 +74,9 @@ const FormWithStep = () => {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
     if (activeStep === 3) {
-      alert([
-        "First Name:",
-        formik.values.firstName,
-        "Last Name: ",
-        formik.values.lastName,
-        "Email: ",
-        formik.values.email,
-      ]);
+      formik.submitForm();
     }
   };
 
@@ -99,10 +84,9 @@ const FormWithStep = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
+  const handleReset = (values: any) => {
     setActiveStep(0);
     formik.resetForm();
-    formik.submitForm();
   };
 
   return (
@@ -118,7 +102,6 @@ const FormWithStep = () => {
                   {step}
                 </StepLabel>
                 <StepContent>
-                  {/* <Typography>{step}</Typography> */}
                   {getStepContent(index, formik)}
                   <Box>
                     <div>

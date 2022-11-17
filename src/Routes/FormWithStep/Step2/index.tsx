@@ -17,7 +17,7 @@ const StepTwo = ({ formik }: IProps) => {
             value={formik.values.lastName}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.lastName && formik.errors.lastName}
+            error={formik.touched.lastName && formik.errors.lastName !== undefined}
             helperText={formik.touched.lastName ? formik.errors.lastName : ""}
           ></TextField>
         </Fragment>

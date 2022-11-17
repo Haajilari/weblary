@@ -17,7 +17,7 @@ function App() {
         <Container maxWidth="lg">
           <BrowserRouter>
             <Routes>
-              <Route element={<Outlet />}>
+              <Route path="/" element={<VComponent />}>
                 <Route path="/home" element={<Home />} />
                 <Route path="/VComponent" element={<VComponent />} />
                 <Route path="/Formik" element={<TFormik />} />

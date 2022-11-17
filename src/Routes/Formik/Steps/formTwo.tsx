@@ -26,7 +26,6 @@ const FormTwo = ({ className, onclick }: IFormTwo) => {
         validationSchema={SignupSchema}
         onSubmit={(values: any) => {
           // same shape as initial values
-          console.log(values);
         }}
       >
         {({ errors, touched }: any) => (

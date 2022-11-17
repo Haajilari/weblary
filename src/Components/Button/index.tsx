@@ -3,6 +3,8 @@ import { group } from "console";
 import { Fragment } from "react";
 
 interface IStButton {
+  buttonText?: string;
+  onClick?: () => void;
   children?: any;
   group?: boolean;
   groupDef?: any[];
@@ -34,19 +36,19 @@ const staticGroupBtn = [
   },
 ];
 
-const StButton = ({ children, group, groupDef = staticGroupBtn }: IStButton) => {
+const StButton = ({ children, group, groupDef = staticGroupBtn, onClick, buttonText }: IStButton) => {
   return (
     <Fragment>
       {group ? (
         <ButtonGroup>
           {groupDef.map((i: any) => (
-            <Button size={i.size} variant={i.variant} color="info" key={i.key}>
+            <Button onClick={onClick} size={i.size} variant={i.variant} color="info" key={i.key}>
               {i.value}
             </Button>
           ))}
         </ButtonGroup>
       ) : (
-        <Button>{children}</Button>
+        <Button>{buttonText}</Button>
       )}
     </Fragment>
   );

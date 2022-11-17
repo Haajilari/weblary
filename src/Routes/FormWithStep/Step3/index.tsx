@@ -18,7 +18,7 @@ const StepThree = ({ formik }: IProps) => {
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.email ||  typeof formik.errors.email === "string" ? true : false}
+            error={formik.touched.email && formik.errors.email !== undefined}
             helperText={formik.touched.email ? formik.errors.email : ""}
           ></TextField>{" "}
         </Fragment>
